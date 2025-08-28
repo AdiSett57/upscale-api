@@ -6,7 +6,15 @@ import sharp from "sharp";
 import { injectSpeedInsights } from "@vercel/speed-insights";
 
 const app = express();
+
 app.set("trust proxy", 1);
+
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 menit
+  max: 250, // max 250 request per menit per IP
+});
+app.use(limiter);
+
 app.use(express.json({ limit: "15mb" }));
 
 // Helper: convert tensor (HWC) ke PNG buffer
