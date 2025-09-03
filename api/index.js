@@ -7,7 +7,8 @@ import { injectSpeedInsights } from "@vercel/speed-insights";
 
 const app = express();
 
-app.set("trust proxy", 1);
+// app.set("trust proxy", 1);
+app.set("trust proxy", true);
 
 app.use(express.json({ limit: "15mb" }));
 
@@ -31,8 +32,45 @@ async function tensorToPng(tensor) {
   return PNG.sync.write(png);
 }
 
+// app.get("/", (req, res) => {
+//   res.send("🚀 Lightweight Upscale API (tfjs + sharp) running on Vercel!");
+// });
+
 app.get("/", (req, res) => {
-  res.send("🚀 Lightweight Upscale API (tfjs + sharp) running on Vercel!");
+  res.type("text/html").send(`
+    <h1>🚀 Lightweight Upscale API</h1>
+    <p>API ini menggunakan <b>TensorFlow.js</b> + <b>Sharp</b> untuk melakukan upscaling gambar.</p>
+    
+    <h2>🔗 Endpoint</h2>
+    <ul>
+      <li><code>GET /</code> → Menampilkan dokumentasi API ini</li>
+      <li><code>POST /upscale</code> → Upscale gambar</li>
+    </ul>
+
+    <h2>📩 Cara Request</h2>
+    <p>Kirim request <code>POST</code> ke <code>/upscale</code> dengan body JSON:</p>
+    <pre>{
+  "image": "data:image/png;base64,...",
+  "scale": 2
+}</pre>
+
+    <h2>📤 Response</h2>
+    <p>Jika sukses, response akan berupa JSON:</p>
+    <pre>{
+  "upscaled": "data:image/png;base64,..."
+}</pre>
+
+    <h2>⚠️ Catatan</h2>
+    <ul>
+      <li><code>image</code> wajib diisi (format base64)</li>
+      <li><code>scale</code> opsional (default = 2)</li>
+      <li>Output selalu dalam format <b>PNG base64</b></li>
+    </ul>
+
+    <hr>
+    <p>📘 Source: API berjalan di atas <b>Vercel Serverless</b></p>
+    <p>Kontak Developer : adisett57@gmail.com</p>
+  `);
 });
 
 app.post("/upscale", async (req, res) => {
@@ -77,6 +115,6 @@ app.post("/upscale", async (req, res) => {
 export default app;
 
 // Hapus bagian listen(), Vercel akan menanganinya secara otomatis
-// app.listen(3000, () => {
-//   console.log("🚀 Upscale API running on http://localhost:3000");
-// });
+app.listen(3000, () => {
+  console.log("🚀 Upscale API running on http://localhost:3000");
+});
