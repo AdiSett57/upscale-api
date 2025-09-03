@@ -115,6 +115,6 @@ app.post("/upscale", async (req, res) => {
 export default app;
 
 // Hapus bagian listen(), Vercel akan menanganinya secara otomatis
-app.listen(3000, () => {
-  console.log("🚀 Upscale API running on http://localhost:3000");
-});
+// app.listen(3000, () => {
+//   console.log("🚀 Upscale API running on http://localhost:3000");
+// });
